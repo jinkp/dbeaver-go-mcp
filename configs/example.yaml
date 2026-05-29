@@ -1,0 +1,29 @@
+# DBeaver Workspace Manager — Example Config
+# Run: dwm create-connections configs/example.yaml
+
+project: MyApp
+
+environments:
+  - DEV
+  - QA
+  - STAGE
+  - PROD
+
+connections:
+  - name: "{{.Project}} {{.Env}} - PostgreSQL"
+    type: postgresql
+    host: "{{.Env}}-postgres.internal"
+    port: 5432
+    database: myapp
+    folder: "{{.Env}}"
+
+  - name: "{{.Project}} {{.Env}} - SQL Server"
+    type: sqlserver
+    host: "{{.Env}}-sqlserver.internal"
+    port: 1433
+    database: myapp
+    folder: "{{.Env}}"
+
+engines:
+  - postgresql
+  - sqlserver

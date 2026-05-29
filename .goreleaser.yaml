@@ -1,0 +1,84 @@
+version: 2
+
+project_name: dwm
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: dwm
+    main: ./cmd/dwm
+    binary: dwm
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - id: dwm
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "arm64" }}arm64
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE*
+      - configs/example.yaml
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+
+release:
+  github:
+    owner: jinkp
+    name: dbeaver-go-mcp
+  name_template: "dwm {{.Version}}"
+  draft: false
+  prerelease: auto
+
+brews:
+  - name: dwm
+    repository:
+      owner: jinkp
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    homepage: "https://github.com/jinkp/dbeaver-go-mcp"
+    description: "DBeaver Workspace Manager — CLI + MCP Server for managing DBeaver configurations"
+    license: "MIT"
+    install: |
+      bin.install "dwm"
+    test: |
+      system "#{bin}/dwm", "--help"

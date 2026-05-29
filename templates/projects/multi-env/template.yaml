@@ -1,0 +1,20 @@
+name: multi-env
+description: "Generic multi-environment project template"
+version: "1.0.0"
+variables:
+  - name: Project
+    description: "Project name (PascalCase)"
+    required: true
+  - name: Environments
+    description: "List of environments"
+    default: [DEV, QA, STAGE, PROD]
+  - name: DBEngine
+    description: "Primary database engine"
+    values: [postgresql, sqlserver, mysql, oracle]
+    default: postgresql
+generates:
+  - type: workspace
+  - type: connections
+  - type: scripts
+    subset: [health-check, deadlocks-check, long-running-queries]
+  - type: snippets

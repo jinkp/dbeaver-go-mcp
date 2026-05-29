@@ -1,0 +1,26 @@
+# Binaries
+dwm
+dwm.exe
+*.exe
+*.test
+
+# Output / generated
+output/
+smoke-output/
+
+# Coverage
+coverage
+coverage.out
+*.coverprofile
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Temp
+tmp/
