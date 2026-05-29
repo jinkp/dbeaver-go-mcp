@@ -37,12 +37,14 @@ archives:
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "arm64" }}arm64
       {{- else }}{{ .Arch }}{{ end }}
+    formats:
+      - tar.gz
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
     files:
       - README.md
-      - LICENSE*
       - configs/example.yaml
 
 checksum:
@@ -65,20 +67,3 @@ release:
   name_template: "dwm {{.Version}}"
   draft: false
   prerelease: auto
-
-brews:
-  - name: dwm
-    repository:
-      owner: jinkp
-      name: homebrew-tap
-      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    commit_author:
-      name: goreleaserbot
-      email: bot@goreleaser.com
-    homepage: "https://github.com/jinkp/dbeaver-go-mcp"
-    description: "DBeaver Workspace Manager — CLI + MCP Server for managing DBeaver configurations"
-    license: "MIT"
-    install: |
-      bin.install "dwm"
-    test: |
-      system "#{bin}/dwm", "--help"
